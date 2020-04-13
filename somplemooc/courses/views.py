@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Course
+from .forms import ContatoCurso
 # Create your views here.
 
 def courses(request):
@@ -14,13 +15,23 @@ def courses(request):
     return render(request, template_name, context)
 
 
-def details(request, pk):
+def details(request, slug):
     
-    curso = get_object_or_404(Course, pk=pk)
+    curso = get_object_or_404(Course, slug=slug)
 
     context = {
         'course': curso
     }
 
     template_name = 'courses/details.html'
+    return render(request, template_name, context)
+
+
+def contatoCourse(request):
+
+    context = {
+        'form': ContatoCurso(),
+    }
+
+    template_name = 'courses/contato_course.html'
     return render(request, template_name, context)
