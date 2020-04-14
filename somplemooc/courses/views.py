@@ -29,9 +29,17 @@ def details(request, slug):
 
 def contatoCourse(request):
 
-    context = {
-        'form': ContatoCurso(),
-    }
+    context = {}
+
+    if request.method == 'POST':
+        form = ContatoCurso(request.POST)
+        if form.is_valid():
+            context['is_valid'] = True
+            form = ContatoCurso()
+    else:
+        form = ContatoCurso()
+
+    context['form'] = form
 
     template_name = 'courses/contato_course.html'
     return render(request, template_name, context)
