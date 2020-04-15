@@ -35,6 +35,8 @@ def contatoCourse(request):
         form = ContatoCurso(request.POST)
         if form.is_valid():
             context['is_valid'] = True
+            print(form.cleaned_data)
+            form.send_mail()
             form = ContatoCurso()
     else:
         form = ContatoCurso()
