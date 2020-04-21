@@ -1,8 +1,10 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+
 from .models import Course
 from .forms import ContatoCurso
-# Create your views here.
 
+@login_required
 def courses(request):
 
     cursos = Course.object.all()
@@ -14,7 +16,7 @@ def courses(request):
     template_name = 'courses/courses.html'
     return render(request, template_name, context)
 
-
+@login_required
 def details(request, slug):
     
     curso = get_object_or_404(Course, slug=slug)
@@ -26,7 +28,7 @@ def details(request, slug):
     template_name = 'courses/details.html'
     return render(request, template_name, context)
 
-
+@login_required
 def contatoCourse(request):
 
     context = {}
