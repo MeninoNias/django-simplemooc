@@ -1,4 +1,4 @@
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.contrib.auth.views import LoginView, LogoutView
 
 from somplemooc.accounts import views
@@ -16,4 +16,6 @@ urlpatterns = [
     path('editar/', views.editarUser, name='edit'),
     path('editar-senha/', views.editarPassword, name='edit_password'),
     path('senha-reset/', views.senhaReset, name='password-reset'),
+    re_path(r'^passoword-reset-confirm/(?P<key>\w+)/$', views.senhaConfirmReset, name='password-reset-confirm'),
+
 ]
