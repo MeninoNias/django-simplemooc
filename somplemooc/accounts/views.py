@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 from somplemooc.core.util import generate_hash_key
 
@@ -67,8 +68,8 @@ def editarUser(request):
         form = EditarAccountForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            form = EditarAccountForm(instance=request.user)
-            context['success'] = True
+            messages.success(request, 'Dados da conta alterados com sucesso')
+            return redirect('accounts:dash')
     else:
         form = EditarAccountForm(instance=request.user)
     context['form'] = form

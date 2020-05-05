@@ -28,14 +28,21 @@
                 <li><a href="{% url 'accounts:login' %}">Entrar</a></li>
                 <li><a href="{% url 'accounts:register' %}">Cadastrar</a></li>
                 {% endif %}
-              
             </ul>
         </div>
     </div>
-    
-    {% block content %}
 
-    {% endblock %}
+    {% if messages %}
+    <div class="pure-g-r content-ribbon">
+        <aside class="pure-u-1">
+            {% for message in messages %}
+            <p>{{ message }}</p>
+            {% endfor %}
+        </aside>
+    </div>
+    {% endif %}
+
+    {% block content %}    {% endblock %}
    
 </div>
 <footer>
