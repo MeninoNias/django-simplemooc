@@ -72,7 +72,7 @@ def undo_enrollment(request, slug):
     if request.method == 'POST':
         enrollment.delete()
         messages.success(request, 'Sua inscrição foi cancelada com sucesso')
-        return redirect('accounts:dashboard')
+        return redirect('accounts:dash')
     template = 'courses/undo_enrollment.html'
     context = {
         'enrollment': enrollment,
@@ -89,7 +89,7 @@ def announcements(request, slug):
         )
         if not enrollment.is_approved():
             messages.error(request, 'A sua inscrição está pendente')
-            return redirect('accounts:dashboard')
+            return redirect('accounts:dash')
     template = 'courses/announcements.html'
     context = {
         'course': course
