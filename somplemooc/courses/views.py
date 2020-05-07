@@ -96,3 +96,20 @@ def announcements(request, slug):
         'announcements': course.announcements.all()
     }
     return render(request, template, context)
+
+@login_required
+def show_announcements(request, slug, pk):
+    course = get_object_or_404(Course, slug=slug)
+    if not request.user.is_staff:
+        enrollment = get_object_or_404(Enrollment, user=request.user, course=course)
+        if not enrollment.is_approved():
+            messages.error(request, 'A sua inscrição está pendente')
+            return redirect('accounts:dash')
+    template = 'courses/show_announcement.html'
+    announcements = get_object_or_404(course.announcements.all(), pk=pk)
+    print(announcements)
+    context = {
+        'course': course,
+        'announcement': announcements
+    }
+    return render(request, template, context)

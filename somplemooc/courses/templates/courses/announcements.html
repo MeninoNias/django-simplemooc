@@ -4,7 +4,7 @@
 {% for announcement in announcements %}
 <div class="well">
     <h2>
-        <a href="#">{{ announcement.title }}</a>
+        <a href="{% url 'courses:show_announcement' course.slug announcement.pk %}">{{ announcement.title }}</a>
     </h2>
     {{ announcement.content|linebreaks }}
     <p>
