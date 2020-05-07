@@ -4,6 +4,8 @@ from django.conf import settings
 
 from somplemooc.core.mail import send_mail_template
 
+from .models import Comment
+
 class ContatoCurso(forms.Form):
 
     name = forms.CharField(label='Nome', max_length=100)
@@ -35,4 +37,9 @@ class ContatoCurso(forms.Form):
         # menssagem = menssagem % context
 
         # send_mail(subject, menssagem, settings.DEFAULT_FROM_EMAIL, [settings.CONTACT_EMAIL])
-        
+
+class CommentForm(forms.ModelForm):
+
+    class Meta:
+        model=Comment
+        fields=['comment']

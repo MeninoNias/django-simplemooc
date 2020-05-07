@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .models import Course, Enrollment
-from .forms import ContatoCurso
+from .forms import ContatoCurso, CommentForm
 
 @login_required
 def courses(request):
@@ -96,20 +96,35 @@ def announcements(request, slug):
         'announcements': course.announcements.all()
     }
     return render(request, template, context)
-
 @login_required
 def show_announcements(request, slug, pk):
+    template = 'courses/show_announcement.html'
     course = get_object_or_404(Course, slug=slug)
+
     if not request.user.is_staff:
         enrollment = get_object_or_404(Enrollment, user=request.user, course=course)
         if not enrollment.is_approved():
             messages.error(request, 'A sua inscrição está pendente')
             return redirect('accounts:dash')
-    template = 'courses/show_announcement.html'
+
     announcements = get_object_or_404(course.announcements.all(), pk=pk)
-    print(announcements)
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.announcement = announcements
+            comment.save()
+            form = CommentForm()
+            messages.success(request, 'Seu comentário foi salvo')
+
+    else:
+        form = CommentForm()
     context = {
         'course': course,
-        'announcement': announcements
+        'announcement': announcements,
+        'form': form
     }
     return render(request, template, context)
