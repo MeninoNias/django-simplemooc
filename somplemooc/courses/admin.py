@@ -18,11 +18,21 @@ class AnnoucementAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display = ['user',  'created_at']
 
+class MaterialInlineAdmin(admin.StackedInline):
+    model = Material
+
+class LessonAdmin(admin.ModelAdmin):
+
+    list_display = ['name', 'number', 'course', 'release_date']
+
+    inlines = [
+        MaterialInlineAdmin
+    ]
 
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Enrollment, EnrollmentAdmin)
 admin.site.register(Annoucement, AnnoucementAdmin)
 admin.site.register(Comment, CommentAdmin)
-admin.site.register(Lesson)
+admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Material)
 
