@@ -4,6 +4,7 @@ from django.contrib import messages
 
 from .models import Course, Enrollment
 from .forms import ContatoCurso, CommentForm
+from .decorators import enrollment_required
 
 @login_required
 def courses(request):
@@ -81,32 +82,21 @@ def undo_enrollment(request, slug):
     return render(request, template, context)
 
 @login_required
+@enrollment_required
 def announcements(request, slug):
-    course = get_object_or_404(Course, slug=slug)
-    if not request.user.is_staff:
-        enrollment = get_object_or_404(
-            Enrollment, user=request.user, course=course
-        )
-        if not enrollment.is_approved():
-            messages.error(request, 'A sua inscrição está pendente')
-            return redirect('accounts:dash')
+    course = request.course
     template = 'courses/announcements.html'
     context = {
         'course': course,
         'announcements': course.announcements.all()
     }
     return render(request, template, context)
+
 @login_required
+@enrollment_required
 def show_announcements(request, slug, pk):
     template = 'courses/show_announcement.html'
-    course = get_object_or_404(Course, slug=slug)
-
-    if not request.user.is_staff:
-        enrollment = get_object_or_404(Enrollment, user=request.user, course=course)
-        if not enrollment.is_approved():
-            messages.error(request, 'A sua inscrição está pendente')
-            return redirect('accounts:dash')
-
+    course = request.course
     announcements = get_object_or_404(course.announcements.all(), pk=pk)
 
     if request.method == 'POST':
