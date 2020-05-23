@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from .models import Course, Enrollment
+from .models import Course, Enrollment, Lesson
 from .forms import ContatoCurso, CommentForm
 from .decorators import enrollment_required
 
@@ -117,4 +117,41 @@ def show_announcements(request, slug, pk):
         'announcement': announcements,
         'form': form
     }
+    return render(request, template, context)
+
+@login_required
+@enrollment_required
+def lessons(request, slug):
+    template = 'courses/lessons.html'
+
+    course = request.course
+    lessons = course.release_lessons()
+
+    if request.user.is_staff:
+        lessons = course.lessons.all()
+
+    context = {
+        'course':course,
+        'lessons': lessons
+    }
+
+    return render(request, template, context)
+
+@login_required
+@enrollment_required
+def lesson(request, slug, pk):
+    template = 'courses/lesson.html'
+
+    course = request.course
+    lesson = get_object_or_404(Lesson, pk=pk, course=course)
+
+    if not request.user.is_staff and not lesson.is_available():
+        messages.error(request, 'Aula não disponivel')
+        return redirect('courses:lessons', slug=course.slug)
+
+    context = {
+        'course':course,
+        'lesson':lesson
+    }
+
     return render(request, template, context)

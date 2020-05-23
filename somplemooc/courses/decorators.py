@@ -22,7 +22,7 @@ def enrollment_required(view_func):
                     message = 'A sua inscrição no curso ainda está pendente'
         if not has_permission:
             messages.error(request, message)
-            return redirect('accounts:dashboard')
+            return redirect('accounts:dash')
         request.course = course
         return view_func(request, *args, **kwargs)
     return _wrapper
