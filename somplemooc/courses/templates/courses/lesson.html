@@ -33,12 +33,12 @@
                     </td>
                     <td>
                         {% if material.is_embedded %}
-                        <a href="#">
+                        <a href="{% url 'courses:material' course.slug material.pk %}">
                             <i class="fa fa-video-camera"></i>
                             Acessar
                         </a>
                         {% else %}
-                        <a target="_blank" href="#">
+                        <a target="_blank" href="{% url 'courses:material'  course.slug material.pk %}">
                             <i class="fa fa-download"></i>
                             Baixar
                         </a>
